@@ -1,0 +1,3 @@
+const MY_SECRET_KEY = 'SUPERSECRETDISCRET'
+
+export default MY_SECRET_KEY

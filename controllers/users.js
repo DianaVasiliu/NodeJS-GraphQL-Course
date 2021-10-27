@@ -3,7 +3,7 @@ const db = require('../models/index.js')
 const getAllUsers = async (req, res) => {
     try {
         const allUsers = await db.User.findAll()
-        res.send(allUsers)
+        res.status(200).send(allUsers)
     } catch (error) {
         console.error('Something went wrong')
         res.send({ error: 'Something went wrong' })
@@ -11,7 +11,19 @@ const getAllUsers = async (req, res) => {
 }
 
 // return user
-const getUserById = (req, res) => {}
+const getUserById = async (req, res) => {
+    try {
+        const selectedUser = await db.User.findByPk(req.params.id)
+
+        if (selectedUser === null) {
+            res.send('User not found')
+        } else {
+            res.send(selectedUser)
+        }
+    } catch (error) {
+        res.send({ error: 'Something went wrong' })
+    }
+}
 
 const createUser = async (req, res) => {
     const { email, firstName, lastName } = req.body
@@ -30,10 +42,35 @@ const createUser = async (req, res) => {
 }
 
 // update user
-const updateUser = (req, res) => {}
+const updateUser = async (req, res) => {
+    const body = req.body
+
+    try {
+        await db.User.update(body, {
+            where: {
+                id: req.params.id,
+            },
+        })
+        const updatedUser = await db.User.findByPk(req.params.id)
+        res.send(updatedUser)
+    } catch (error) {
+        res.send({ error: 'Something went wrong' })
+    }
+}
 
 // status code, no response
-const deleteUser = (req, res) => {}
+const deleteUser = async (req, res) => {
+    try {
+        await db.User.destroy({
+            where: {
+                id: req.params.id,
+            },
+        })
+        res.status(202).send('User deleted successfully')
+    } catch (error) {
+        res.send({ error: 'Something went wrong' })
+    }
+}
 
 module.exports = {
     getAllUsers,

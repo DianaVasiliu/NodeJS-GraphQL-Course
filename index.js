@@ -1,12 +1,10 @@
-import express from 'express'
-import bodyParser from 'body-parser'
+const express = require('express')
+const bodyParser = require('body-parser')
 
-import handleGreeting from './controllers/greetings.js'
-import handleLogin from './controllers/login.js'
-import authorizationMiddleware from './middleware/authorization.js'
-import port from './config/express.js'
-// import dogFacts from './dogFacts.js'
-// import books from './books.js'
+const handleGreeting = require('./controllers/greetings')
+const handleLogin = require('./controllers/login')
+const authorizationMiddleware = require('./middleware/authorization')
+const { port } = require('./config/express')
 
 const app = express()
 
@@ -21,10 +19,6 @@ app.post('/login', handleLogin)
 app.get('/hello', authorizationMiddleware, handleGreeting)
 
 app.get('/hello/:name?', authorizationMiddleware, handleGreeting)
-
-// app.get('/dogs', dogFacts)
-
-// app.get('/books', books)
 
 app.listen(port, () => {
     console.log('Server started on port', port)

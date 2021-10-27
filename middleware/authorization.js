@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'
-import MY_SECRET_KEY from '../config/jwt.js'
+const jwt = require('jsonwebtoken')
+const { MY_SECRET_KEY } = require('../config/jwt')
 
 const authorizationMiddleware = (req, res, next) => {
     const authorization = req.headers.authorization
@@ -22,4 +22,4 @@ const authorizationMiddleware = (req, res, next) => {
     }
 }
 
-export default authorizationMiddleware
+module.exports = authorizationMiddleware

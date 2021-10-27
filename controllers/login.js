@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
-import findUser from '../helpers/findUser.js'
-import MY_SECRET_KEY from '../config/jwt.js'
+const jwt = require('jsonwebtoken')
+const findUser = require('../helpers/findUser.js')
+const { MY_SECRET_KEY } = require('../config/jwt.js')
 
 const handleLogin = (req, res) => {
     const body = req.body
@@ -19,4 +19,4 @@ const handleLogin = (req, res) => {
     }
 }
 
-export default handleLogin
+module.exports = handleLogin

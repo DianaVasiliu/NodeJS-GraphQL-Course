@@ -1,3 +1,1 @@
-const port = 3000
-
-export default port
+module.exports.port = 3000

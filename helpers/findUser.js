@@ -6,4 +6,4 @@ const findUser = (username, password) => {
     }
 }
 
-export default findUser
+module.exports = findUser

@@ -7,4 +7,4 @@ const handleGreeting = ({ params }, response) => {
     }
 }
 
-export default handleGreeting
+module.exports = handleGreeting

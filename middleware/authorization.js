@@ -15,6 +15,10 @@ const authorizationMiddleware = (req, res, next) => {
                 error: 'Invalid Token',
             })
         }
+    } else {
+        res.send({
+            error: 'Invalid Token',
+        })
     }
 }
 

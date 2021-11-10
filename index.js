@@ -1,5 +1,7 @@
 const express = require('express')
+const { graphqlHTTP } = require('express-graphql')
 const bodyParser = require('body-parser')
+const schema = require('./graphql')
 
 const handleGreeting = require('./controllers/greetings')
 const handleLogin = require('./controllers/login')
@@ -48,6 +50,14 @@ app.get('/posts/:id', getPostById)
 app.put('/posts/:id', updatePost)
 app.delete('/posts/:id', deletePost)
 app.post('/posts/:postId/tags/:tagId', addTagToPost)
+
+app.use(
+    '/graphql',
+    graphqlHTTP({
+        schema,
+        graphiql: true,
+    })
+)
 
 app.listen(port, () => {
     console.log('Server started on port', port)

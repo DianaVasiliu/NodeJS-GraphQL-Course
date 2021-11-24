@@ -1,33 +1,23 @@
 const db = require('../models/index.js')
 
-const getAllPosts = async (req, res) => {
+const getAllPosts = async () => {
     try {
         const allPosts = await db.Post.findAll()
-        res.status(200).send(allPosts)
+        return allPosts
     } catch (error) {
         console.error('Something went wrong')
-        res.send({ error: 'Something went wrong' })
+        return null
     }
 }
 
-const getPostById = async (req, res) => {
+const getPostById = async (id) => {
+    const postId = parseInt(id)
+
     try {
-        const post = await db.Post.findByPk(req.params.id)
-        const author = await post.getUser()
-        console.log('author: ', author)
-
-        const response = {
-            ...post.dataValues,
-            author,
-        }
-
-        if (post === null) {
-            res.send('Post not found')
-        } else {
-            res.send(response)
-        }
+        const post = await db.Post.findByPk(postId)
+        return post
     } catch (error) {
-        res.send({ error: 'Something went wrong' })
+        return null
     }
 }
 

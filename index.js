@@ -1,58 +1,15 @@
 const express = require('express')
 const { graphqlHTTP } = require('express-graphql')
-const bodyParser = require('body-parser')
 const schema = require('./graphql')
 
-const handleGreeting = require('./controllers/greetings')
-const handleLogin = require('./controllers/login')
 const authorizationMiddleware = require('./middleware/authorization')
 const { port } = require('./config/express')
-const {
-    getAllUsers,
-    getUserById,
-    createUser,
-    updateUser,
-    deleteUser,
-} = require('./controllers/users')
-const {
-    addTagToPost,
-    getAllPosts,
-    getPostById,
-    createPost,
-    updatePost,
-    deletePost,
-} = require('./controllers/posts')
 
 const app = express()
 
-app.use(bodyParser.json())
-
-app.get('/', (req, res) => {
-    res.send('Hello, World!')
-})
-
-app.post('/login', handleLogin)
-app.get('/hello', authorizationMiddleware, handleGreeting)
-app.get('/hello/:name?', authorizationMiddleware, handleGreeting)
-
-// users
-app.get('/users', getAllUsers)
-app.get('/users/:id', getUserById)
-app.post('/users/', createUser)
-app.put('/users/:id', updateUser)
-app.delete('/users/:id', deleteUser)
-
-app.post('/users/:id/posts', createPost)
-
-// posts
-app.get('/posts', getAllPosts)
-app.get('/posts/:id', getPostById)
-app.put('/posts/:id', updatePost)
-app.delete('/posts/:id', deletePost)
-app.post('/posts/:postId/tags/:tagId', addTagToPost)
-
 app.use(
     '/graphql',
+    authorizationMiddleware,
     graphqlHTTP({
         schema,
         graphiql: true,

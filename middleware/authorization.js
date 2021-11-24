@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { MY_SECRET_KEY } = require('../config/jwt')
+const db = require('../models')
 
-const authorizationMiddleware = (req, res, next) => {
+const authorizationMiddleware = async (req, res, next) => {
     const authorization = req.headers.authorization
     if (authorization) {
         try {
@@ -9,16 +10,20 @@ const authorizationMiddleware = (req, res, next) => {
                 authorization.replace('Bearer ', ''),
                 MY_SECRET_KEY
             )
-            next()
+            const userId = decoded.id
+
+            const user = await db.User.findByPk(userId)
+
+            if (user) {
+                req.user = user
+                next()
+            }
         } catch (e) {
-            res.send({
-                error: 'Invalid Token',
-            })
+            console.error('Error: ', e)
+            next()
         }
     } else {
-        res.send({
-            error: 'Invalid Token',
-        })
+        next()
     }
 }
 

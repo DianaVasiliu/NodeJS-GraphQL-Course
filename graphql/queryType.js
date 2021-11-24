@@ -7,6 +7,8 @@ const {
 const db = require('../models')
 const userType = require('./types/userType')
 const postType = require('./types/postType')
+const { getAllUsers, getUserById } = require('../repository/users')
+const { getAllPosts, getPostById } = require('../repository/posts')
 
 const queryType = new GraphQLObjectType({
     name: 'Query',
@@ -14,7 +16,7 @@ const queryType = new GraphQLObjectType({
         users: {
             type: new GraphQLList(userType),
             resolve: async () => {
-                return await db.User.findAll()
+                return await getAllUsers()
             },
         },
         user: {
@@ -24,14 +26,14 @@ const queryType = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLID),
                 },
             },
-            resolve: async (source, { id }) => {
-                return await db.User.findByPk(id)
+            resolve: async (source, { id }, context) => {
+                return getUserById(id)
             },
         },
         posts: {
             type: new GraphQLList(postType),
             resolve: async () => {
-                return await db.Post.findAll()
+                return getAllPosts()
             },
         },
         post: {
@@ -42,8 +44,7 @@ const queryType = new GraphQLObjectType({
                 },
             },
             resolve: async (source, { id }) => {
-                const post = await db.Post.findByPk(id)
-                return post
+                return getPostById(id)
             },
         },
     },
